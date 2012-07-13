@@ -1,18 +1,20 @@
-VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+VERSION 4.00
 Begin VB.Form frmRGB 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Peter Chapman's Colour Slider 2005 (V2.5)"
    ClientHeight    =   2535
-   ClientLeft      =   45
-   ClientTop       =   330
+   ClientLeft      =   4260
+   ClientTop       =   3615
    ClientWidth     =   5775
+   Height          =   3045
    Icon            =   "RGB.frx":0000
+   Left            =   4200
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   2535
    ScaleWidth      =   5775
-   StartUpPosition =   3  'Windows Default
+   Top             =   3165
+   Width           =   5895
    Begin VB.OptionButton optForeground 
       Caption         =   "Foreground"
       Height          =   255
@@ -198,10 +200,10 @@ Begin VB.Form frmRGB
    End
 End
 Attribute VB_Name = "frmRGB"
-Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
 Option Explicit
 
 Dim SetHTMLColourExecuting As Boolean
