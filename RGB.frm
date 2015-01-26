@@ -1,7 +1,7 @@
 VERSION 4.00
 Begin VB.Form frmRGB 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Peter Chapman's Colour Slider 2005 (V2.5)"
+   Caption         =   "Peter Chapman's Colour Slider 2015 (V2.6)"
    ClientHeight    =   2535
    ClientLeft      =   4260
    ClientTop       =   3615
@@ -113,9 +113,10 @@ Begin VB.Form frmRGB
       TabIndex        =   2
       Top             =   1200
       Width           =   3975
+      _Version        =   65536
       _ExtentX        =   7011
       _ExtentY        =   661
-      _Version        =   327682
+      _StockProps     =   64
       Max             =   255
    End
    Begin ComctlLib.Slider SliderG 
@@ -124,9 +125,10 @@ Begin VB.Form frmRGB
       TabIndex        =   1
       Top             =   720
       Width           =   3975
+      _Version        =   65536
       _ExtentX        =   7011
       _ExtentY        =   661
-      _Version        =   327682
+      _StockProps     =   64
       Max             =   255
    End
    Begin ComctlLib.Slider SliderR 
@@ -135,9 +137,10 @@ Begin VB.Form frmRGB
       TabIndex        =   0
       Top             =   240
       Width           =   3975
+      _Version        =   65536
       _ExtentX        =   7011
       _ExtentY        =   661
-      _Version        =   327682
+      _StockProps     =   64
       Max             =   255
    End
    Begin VB.Label lblGeneral 
