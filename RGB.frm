@@ -9,7 +9,6 @@ Begin VB.Form frmRGB
    Height          =   3045
    Icon            =   "RGB.frx":0000
    Left            =   4200
-   LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    ScaleHeight     =   2535
    ScaleWidth      =   5775
