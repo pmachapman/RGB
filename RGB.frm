@@ -1,22 +1,37 @@
 VERSION 4.00
 Begin VB.Form frmRGB 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Peter Chapman's Colour Slider 2015 (V2.7)"
-   ClientHeight    =   2745
-   ClientLeft      =   4260
-   ClientTop       =   3615
+   Caption         =   "Peter Chapman's Colour Slider 2.7"
+   ClientHeight    =   3210
+   ClientLeft      =   2580
+   ClientTop       =   4035
    ClientWidth     =   5775
-   Height          =   3255
+   Height          =   3720
    Icon            =   "RGB.frx":0000
-   Left            =   4200
-   LockControls    =   -1  'True
+   Left            =   2520
    MaxButton       =   0   'False
-   ScaleHeight     =   2745
+   ScaleHeight     =   3210
    ScaleWidth      =   5775
-   Top             =   3165
+   Top             =   3585
    Width           =   5895
+   Begin VB.CheckBox chkLowerCase 
+      Caption         =   "Generate &Lower Case Colour Code"
+      Height          =   195
+      Left            =   2640
+      TabIndex        =   21
+      Top             =   2880
+      Width           =   2895
+   End
+   Begin VB.CheckBox chkOnTop 
+      Caption         =   "&Keep Window On Top"
+      Height          =   195
+      Left            =   360
+      TabIndex        =   20
+      Top             =   2880
+      Width           =   2055
+   End
    Begin VB.OptionButton optForeground 
-      Caption         =   "Foreground"
+      Caption         =   "&Foreground"
       Height          =   255
       Left            =   720
       TabIndex        =   16
@@ -24,7 +39,7 @@ Begin VB.Form frmRGB
       Width           =   1215
    End
    Begin VB.OptionButton optBackground 
-      Caption         =   "Background"
+      Caption         =   "B&ackground"
       Height          =   255
       Left            =   2040
       TabIndex        =   17
@@ -44,7 +59,7 @@ Begin VB.Form frmRGB
       Height          =   285
       Left            =   4680
       MaxLength       =   3
-      TabIndex        =   10
+      TabIndex        =   8
       Top             =   840
       Width           =   375
    End
@@ -52,7 +67,7 @@ Begin VB.Form frmRGB
       Height          =   285
       Left            =   5280
       MaxLength       =   2
-      TabIndex        =   9
+      TabIndex        =   11
       Top             =   360
       Width           =   375
    End
@@ -60,7 +75,7 @@ Begin VB.Form frmRGB
       Height          =   285
       Left            =   5280
       MaxLength       =   2
-      TabIndex        =   11
+      TabIndex        =   12
       Top             =   840
       Width           =   375
    End
@@ -76,7 +91,7 @@ Begin VB.Form frmRGB
       Height          =   285
       Left            =   4680
       MaxLength       =   3
-      TabIndex        =   12
+      TabIndex        =   9
       Top             =   1320
       Width           =   375
    End
@@ -84,13 +99,13 @@ Begin VB.Form frmRGB
       Height          =   285
       Left            =   4680
       MaxLength       =   3
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   360
       Width           =   375
    End
    Begin VB.CommandButton cmdExit 
       Cancel          =   -1  'True
-      Caption         =   "Exit"
+      Caption         =   "&Exit"
       Height          =   375
       Left            =   4320
       TabIndex        =   19
@@ -154,7 +169,7 @@ Begin VB.Form frmRGB
    Begin VB.Label lblGeneral 
       Alignment       =   1  'Right Justify
       AutoSize        =   -1  'True
-      Caption         =   "HTML Colour"
+      Caption         =   "HTML &Colour"
       Height          =   195
       Index           =   5
       Left            =   3510
@@ -164,17 +179,17 @@ Begin VB.Form frmRGB
    End
    Begin VB.Label lblGeneral 
       Alignment       =   2  'Center
-      Caption         =   "Hex"
+      Caption         =   "&Hex"
       Height          =   255
       Index           =   4
       Left            =   5280
-      TabIndex        =   7
+      TabIndex        =   10
       Top             =   120
       Width           =   375
    End
    Begin VB.Label lblGeneral 
       Alignment       =   2  'Center
-      Caption         =   "Dec"
+      Caption         =   "&Dec"
       Height          =   255
       Index           =   3
       Left            =   4680
@@ -183,7 +198,7 @@ Begin VB.Form frmRGB
       Width           =   375
    End
    Begin VB.Label lblGeneral 
-      Caption         =   "Blue"
+      Caption         =   "&Blue"
       Height          =   255
       Index           =   2
       Left            =   120
@@ -192,7 +207,7 @@ Begin VB.Form frmRGB
       Width           =   495
    End
    Begin VB.Label lblGeneral 
-      Caption         =   "Green"
+      Caption         =   "&Green"
       Height          =   255
       Index           =   1
       Left            =   120
@@ -201,7 +216,7 @@ Begin VB.Form frmRGB
       Width           =   495
    End
    Begin VB.Label lblGeneral 
-      Caption         =   "Red"
+      Caption         =   "&Red"
       Height          =   255
       Index           =   0
       Left            =   120
@@ -222,6 +237,24 @@ Dim OtherColour As String
 ' True if the colour is being set via HTML text
 Dim SetHTMLColourExecuting As Boolean
 
+' Change to lower case checkbox click event handler
+Private Sub chkLowerCase_Click()
+    If chkLowerCase.Value Then
+        txtHTMLColour.Text = LCase(txtHTMLColour.Text)
+    Else
+        txtHTMLColour.Text = UCase(txtHTMLColour.Text)
+    End If
+End Sub
+
+' Keep window on top checkbox click event handler
+Private Sub chkOnTop_Click()
+    If chkOnTop.Value Then
+        SetTopMostWindow Me.hwnd, True
+    Else
+        SetTopMostWindow Me.hwnd, False
+    End If
+End Sub
+
 ' Exit button click event handler
 Private Sub cmdExit_Click()
     Unload Me
@@ -229,11 +262,13 @@ End Sub
 
 ' Form load event handler
 Private Sub Form_Load()
-    optForeground.Value = GetSetting("Peter Chapman", "Colour Slider", "Foreground", "False")
-    optBackground.Value = GetSetting("Peter Chapman", "Colour Slider", "Background", "True")
-    txtRed.Text = GetSetting("Peter Chapman", "Colour Slider", "Red", "0")
-    txtGreen.Text = GetSetting("Peter Chapman", "Colour Slider", "Green", "0")
-    txtBlue.Text = GetSetting("Peter Chapman", "Colour Slider", "Blue", "0")
+    chkOnTop.Value = GetSetting("Peter Chapman", "Colour Slider", "OnTop", 0)
+    chkLowerCase.Value = GetSetting("Peter Chapman", "Colour Slider", "LowerCase", 0)
+    optForeground.Value = GetSetting("Peter Chapman", "Colour Slider", "Foreground", False)
+    optBackground.Value = GetSetting("Peter Chapman", "Colour Slider", "Background", True)
+    txtRed.Text = GetSetting("Peter Chapman", "Colour Slider", "Red", 255)
+    txtGreen.Text = GetSetting("Peter Chapman", "Colour Slider", "Green", 255)
+    txtBlue.Text = GetSetting("Peter Chapman", "Colour Slider", "Blue", 255)
     OtherColour = GetSetting("Peter Chapman", "Colour Slider", "OtherColour", "#000000")
     If optForeground.Value Then
         optBackground.Value = True
@@ -252,6 +287,8 @@ Private Sub Form_Unload(Cancel As Integer)
     SaveSetting "Peter Chapman", "Colour Slider", "Foreground", optForeground.Value
     SaveSetting "Peter Chapman", "Colour Slider", "Background", optBackground.Value
     SaveSetting "Peter Chapman", "Colour Slider", "OtherColour", OtherColour
+    SaveSetting "Peter Chapman", "Colour Slider", "OnTop", chkOnTop.Value
+    SaveSetting "Peter Chapman", "Colour Slider", "LowerCase", chkLowerCase.Value
     End
 End Sub
 
@@ -268,6 +305,11 @@ Private Sub optForeground_Click()
     OtherColour = sCurrentColour
 End Sub
 
+' Blue scrollbar change event handler
+Private Sub SliderB_Change()
+    SliderB_Scroll
+End Sub
+
 ' Blue scrollbar scroll event handler
 Private Sub SliderB_Scroll()
     txtBlue.Text = SliderB.Value
@@ -279,6 +321,11 @@ Private Sub SliderB_Scroll()
     End If
 End Sub
 
+' Green scrollbar change event handler
+Private Sub SliderG_Change()
+    SliderG_Scroll
+End Sub
+
 ' Green scrollbar scroll event handler
 Private Sub SliderG_Scroll()
     txtGreen.Text = SliderG.Value
@@ -288,6 +335,11 @@ Private Sub SliderG_Scroll()
     Else
         lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
     End If
+End Sub
+
+' Red scrollbar change event handler
+Private Sub SliderR_Change()
+    SliderR_Scroll
 End Sub
 
 ' Red scrollbar scroll event handler
@@ -349,7 +401,7 @@ Private Sub txtHTMLColour_Change()
         txtGreenHex.Text = UCase(Mid(hexColour, 4, 2))
         txtBlueHex.Text = UCase(Mid(hexColour, 6, 2))
     End If
-    txtHTMLColour.Text = UCase(txtHTMLColour.Text)
+    chkLowerCase_Click
 End Sub
 
 ' Decimal red textbox change event handler
