@@ -1,7 +1,7 @@
 VERSION 4.00
 Begin VB.Form frmRGB 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Peter Chapman's Colour Slider 2.7"
+   Caption         =   "Peter Chapman's Colour Slider 2.8"
    ClientHeight    =   3210
    ClientLeft      =   2580
    ClientTop       =   4035
@@ -262,6 +262,8 @@ End Sub
 
 ' Form load event handler
 Private Sub Form_Load()
+    Me.Top = GetSetting("Peter Chapman", "Colour Slider", "Top", (Screen.Height - Me.Height) / 2)
+    Me.Left = GetSetting("Peter Chapman", "Colour Slider", "Left", (Screen.Width - Me.Width) / 2)
     chkOnTop.Value = GetSetting("Peter Chapman", "Colour Slider", "OnTop", 0)
     chkLowerCase.Value = GetSetting("Peter Chapman", "Colour Slider", "LowerCase", 0)
     optForeground.Value = GetSetting("Peter Chapman", "Colour Slider", "Foreground", False)
@@ -289,6 +291,8 @@ Private Sub Form_Unload(Cancel As Integer)
     SaveSetting "Peter Chapman", "Colour Slider", "OtherColour", OtherColour
     SaveSetting "Peter Chapman", "Colour Slider", "OnTop", chkOnTop.Value
     SaveSetting "Peter Chapman", "Colour Slider", "LowerCase", chkLowerCase.Value
+    SaveSetting "Peter Chapman", "Colour Slider", "Top", Me.Top
+    SaveSetting "Peter Chapman", "Colour Slider", "Left", Me.Left
     End
 End Sub
 
