@@ -2,5 +2,6 @@
 ## Microsoft Visual Basic
 #################
 
+*.exe
 *.log
 *.vbw

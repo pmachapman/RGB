@@ -1,40 +1,56 @@
 VERSION 4.00
 Begin VB.Form frmRGB 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Peter Chapman's Colour Slider 2.8"
-   ClientHeight    =   3210
+   Caption         =   "Peter Chapman's Colour Slider 2.9"
+   ClientHeight    =   3630
    ClientLeft      =   2580
    ClientTop       =   4035
    ClientWidth     =   5775
-   Height          =   3720
+   Height          =   4140
    Icon            =   "RGB.frx":0000
    Left            =   2520
    MaxButton       =   0   'False
-   ScaleHeight     =   3210
+   ScaleHeight     =   3630
    ScaleWidth      =   5775
    Top             =   3585
    Width           =   5895
+   Begin VB.CommandButton cmdSwap 
+      Caption         =   "&Swap Foreground and Background"
+      Height          =   375
+      Left            =   720
+      TabIndex        =   20
+      Top             =   2160
+      Width           =   2655
+   End
+   Begin VB.TextBox txtOLEColour 
+      Height          =   285
+      Left            =   4680
+      MaxLength       =   8
+      TabIndex        =   17
+      Top             =   2160
+      Width           =   975
+   End
    Begin VB.CheckBox chkLowerCase 
       Caption         =   "Generate &Lower Case Colour Code"
       Height          =   195
       Left            =   2640
-      TabIndex        =   21
-      Top             =   2880
+      TabIndex        =   24
+      Top             =   3360
       Width           =   2895
    End
    Begin VB.CheckBox chkOnTop 
       Caption         =   "&Keep Window On Top"
       Height          =   195
       Left            =   360
-      TabIndex        =   20
-      Top             =   2880
+      TabIndex        =   23
+      Top             =   3360
       Width           =   2055
    End
    Begin VB.OptionButton optForeground 
       Caption         =   "&Foreground"
       Height          =   255
       Left            =   720
-      TabIndex        =   16
+      TabIndex        =   18
       Top             =   1785
       Width           =   1215
    End
@@ -42,7 +58,7 @@ Begin VB.Form frmRGB
       Caption         =   "B&ackground"
       Height          =   255
       Left            =   2040
-      TabIndex        =   17
+      TabIndex        =   19
       Top             =   1785
       Value           =   -1  'True
       Width           =   1215
@@ -108,9 +124,20 @@ Begin VB.Form frmRGB
       Caption         =   "&Exit"
       Height          =   375
       Left            =   4320
-      TabIndex        =   19
-      Top             =   2235
+      TabIndex        =   22
+      Top             =   2715
       Width           =   1335
+   End
+   Begin VB.Label lblGeneral 
+      Alignment       =   1  'Right Justify
+      AutoSize        =   -1  'True
+      Caption         =   "&OLE Colour"
+      Height          =   195
+      Index           =   6
+      Left            =   3615
+      TabIndex        =   16
+      Top             =   2190
+      Width           =   810
    End
    Begin VB.Label lblMain 
       Alignment       =   2  'Center
@@ -126,8 +153,8 @@ Begin VB.Form frmRGB
       EndProperty
       Height          =   495
       Left            =   195
-      TabIndex        =   18
-      Top             =   2160
+      TabIndex        =   21
+      Top             =   2640
       Width           =   3945
    End
    Begin ComctlLib.Slider SliderB 
@@ -237,6 +264,9 @@ Dim OtherColour As String
 ' True if the colour is being set via HTML text
 Dim SetHTMLColourExecuting As Boolean
 
+' True if the colour is being set via OE number
+Dim SetOLEColourExecuting As Boolean
+
 ' Change to lower case checkbox click event handler
 Private Sub chkLowerCase_Click()
     If chkLowerCase.Value Then
@@ -258,6 +288,19 @@ End Sub
 ' Exit button click event handler
 Private Sub cmdExit_Click()
     Unload Me
+End Sub
+
+' Swap Background and Foreground Colours button click event handler
+Private Sub cmdSwap_Click()
+    If optForeground.Value Then
+        lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
+        optForeground_Click
+        lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
+    Else
+        lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
+        optForeground_Click
+        lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
+    End If
 End Sub
 
 ' Form load event handler
@@ -318,7 +361,7 @@ End Sub
 Private Sub SliderB_Scroll()
     txtBlue.Text = SliderB.Value
     txtBlueHex.Text = Hex(SliderB.Value)
-    If optBackground.Value = True Then
+    If optBackground.Value Then
         lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
     Else
         lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
@@ -334,7 +377,7 @@ End Sub
 Private Sub SliderG_Scroll()
     txtGreen.Text = SliderG.Value
     txtGreenHex.Text = Hex(SliderG.Value)
-    If optBackground.Value = True Then
+    If optBackground.Value Then
         lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
     Else
         lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
@@ -350,7 +393,7 @@ End Sub
 Private Sub SliderR_Scroll()
     txtRed.Text = SliderR.Value
     txtRedHex.Text = Hex(SliderR.Value)
-    If optBackground.Value = True Then
+    If optBackground.Value Then
         lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
     Else
         lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
@@ -362,7 +405,7 @@ Private Sub txtBlue_Change()
     On Error GoTo txtBlueErr
     SliderB.Value = txtBlue.Text
     If txtBlueHex.Text <> Hex(txtBlue.Text) Then txtBlueHex.Text = Hex(txtBlue.Text)
-    If optBackground.Value = True Then
+    If optBackground.Value Then
         lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
     Else
         lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
@@ -373,7 +416,7 @@ End Sub
 ' Hexadecimal blue textbox change event handler
 Private Sub txtBlueHex_Change()
     txtBlue.Text = Dec(txtBlueHex.Text)
-    If txtBlueHex.Text <> Mid(txtHTMLColour.Text, 6, 2) Then SetHTMLColour
+    If txtBlueHex.Text <> Mid(txtHTMLColour.Text, 6, 2) Then SetHTMLAndOLEColour
 End Sub
 
 ' Decimal green textbox change event handler
@@ -381,7 +424,7 @@ Private Sub txtGreen_Change()
     On Error GoTo txtGreenErr
     SliderG.Value = txtGreen.Text
     If txtGreenHex.Text <> Hex(txtGreen.Text) Then txtGreenHex.Text = Hex(txtGreen.Text)
-    If optBackground.Value = True Then
+    If optBackground.Value Then
         lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
     Else
         lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
@@ -392,20 +435,33 @@ End Sub
 ' Hexadecimal green textbox change event handler
 Private Sub txtGreenHex_Change()
     txtGreen.Text = Dec(txtGreenHex.Text)
-    If txtGreenHex.Text <> Mid(txtHTMLColour.Text, 4, 2) Then SetHTMLColour
+    If txtGreenHex.Text <> Mid(txtHTMLColour.Text, 4, 2) Then SetHTMLAndOLEColour
 End Sub
 
-' HTML colour textbox chnage event handler
+' HTML colour textbox change event handler
 Private Sub txtHTMLColour_Change()
     Dim hexColour As String
-    If Left(txtHTMLColour.Text, 1) = "#" And SetHTMLColourExecuting = False Then
+    If Left(txtHTMLColour.Text, 1) = "#" And Not SetHTMLColourExecuting Then
         hexColour = txtHTMLColour.Text
         If Len(hexColour) < 7 Then hexColour = hexColour + String(7 - Len(hexColour), "0")
         txtRedHex.Text = UCase(Mid(hexColour, 2, 2))
         txtGreenHex.Text = UCase(Mid(hexColour, 4, 2))
         txtBlueHex.Text = UCase(Mid(hexColour, 6, 2))
+        SetOLEColour
     End If
     chkLowerCase_Click
+End Sub
+
+Private Sub txtOLEColour_Change()
+    On Error GoTo txtOLEColourErr
+    Dim OLEColour As Long
+    OLEColour = Val(txtOLEColour.Text)
+    If OLEColour >= 0 And OLEColour <= 16777215 And Not SetOLEColourExecuting Then
+        txtRed.Text = OLEColour And &HFF&
+        txtGreen.Text = (OLEColour And &HFF00&) \ &H100
+        txtBlue.Text = (OLEColour And &HFF0000) \ &H10000
+    End If
+txtOLEColourErr:
 End Sub
 
 ' Decimal red textbox change event handler
@@ -413,7 +469,7 @@ Private Sub txtRed_Change()
     On Error GoTo txtRedErr
     SliderR.Value = txtRed.Text
     If txtRedHex.Text <> Hex(txtRed.Text) Then txtRedHex.Text = Hex(txtRed.Text)
-    If optBackground.Value = True Then
+    If optBackground.Value Then
         lblMain.BackColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
     Else
         lblMain.ForeColor = RGB(SliderR.Value, SliderG.Value, SliderB.Value)
@@ -423,14 +479,20 @@ End Sub
 
 ' Hexadecimal red textbox change event handler
 Private Sub txtRedHex_Change()
-txtRed.Text = Dec(txtRedHex.Text)
-If txtRedHex.Text <> Mid(txtHTMLColour.Text, 2, 2) Then SetHTMLColour
+    txtRed.Text = Dec(txtRedHex.Text)
+    If txtRedHex.Text <> Mid(txtHTMLColour.Text, 2, 2) Then SetHTMLAndOLEColour
 End Sub
 
 ' Converts a hexadecimal number from a string to a decimal number
 Private Function Dec(hexNumber As String) As Long
     Dec = Val("&H" + hexNumber)
 End Function
+
+' Sets the HTML and OLE colour
+Private Sub SetHTMLAndOLEColour()
+    SetHTMLColour
+    SetOLEColour
+End Sub
 
 ' Sets the HTML colour
 Private Sub SetHTMLColour()
@@ -446,4 +508,11 @@ Private Sub SetHTMLColour()
     If Len(B) = 1 Then B = "0" + B
     txtHTMLColour.Text = "#" + R + G + B
     SetHTMLColourExecuting = False
+End Sub
+
+' Sets the OLE colour
+Private Sub SetOLEColour()
+    SetOLEColourExecuting = True
+    txtOLEColour.Text = SliderR.Value + (SliderG.Value * 256) + (SliderB.Value * 256 * 256)
+    SetOLEColourExecuting = False
 End Sub
