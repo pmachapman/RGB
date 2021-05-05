@@ -4,7 +4,7 @@ This is a simple colour slider written in Microsoft Visual Basic, with support f
 
 ## Download
 
-You can download the executable from https://archive.azurewebsites.net/Programs/RGB-2.8.zip
+You can download the executable from https://github.com/pmachapman/RGB/releases/download/2.9/RGB-2.9.zip
 
 ## This program comes without any warranty
 
